@@ -1,0 +1,40 @@
+
+ const int echo = 11;
+ const int trig = 12;
+int led = 13;
+
+
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin ( 9600); 
+pinMode ( echo,INPUT);
+pinMode (trig , OUTPUT);
+pinMode (led, OUTPUT);
+digitalWrite (trig, LOW);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  long d;
+  long t;
+  
+digitalWrite ( trig,HIGH);
+delay(10);
+digitalWrite (trig, LOW);
+
+t = pulseIn(echo, HIGH);
+d = t/59 ;
+
+Serial.println ("Distancia");
+Serial.println (d);
+Serial.println ("cm");
+delay(100);
+
+if (d < 10){
+  digitalWrite( led,HIGH);
+} 
+else{
+  digitalWrite(led,LOW);
+}
+
+}
