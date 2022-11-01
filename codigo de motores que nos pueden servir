@@ -1,0 +1,468 @@
+boolean H=true;
+boolean V=false;
+boolean N=false;
+boolean S=false;
+boolean E=true;
+boolean O=false;
+
+int timepomedio=10;
+int timepocompleto=20;
+
+char date=' ';
+int resx=0;
+int resy=0;
+
+int x=0;
+int y=0;
+int z=0;
+
+int ax=0;
+int bx=100;
+int cx=200;
+
+int ay=0;
+int by=100;
+int cy=200;
+
+int x2=0;
+int y2=0;
+
+int x3=0;
+int y3=0;
+
+int cont=0;
+
+int dirx=0;
+int diry=0;
+
+
+
+String voice;
+//byte perforadorA=49;
+//byte perforadorB=51;
+
+
+int stepDelay = 2500;
+
+
+
+//byte motor1A=45;
+//byte motor1B=47;
+
+//byte motor2A=41;
+//byte motor2B=43;
+
+byte motor1A=12;
+byte motor1B=14;
+
+byte motor2A=4;
+byte motor2B=5;
+char c;
+void setup() {
+
+ Serial.begin(9600);
+ //Serial3.begin(9600);
+
+
+
+ 
+  pinMode(motor1A,OUTPUT);
+  pinMode(motor1B,OUTPUT);
+  pinMode(motor2A,OUTPUT);
+  pinMode(motor2B,OUTPUT);
+
+
+
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,0);
+
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,0);
+ 
+}
+
+
+void adelante(int tiempo){
+    Serial.println("adelante");
+    digitalWrite(motor1A,0);
+    digitalWrite(motor1B,0);
+    digitalWrite(motor2A,0);
+    digitalWrite(motor2B,0);
+    delay(500);
+    digitalWrite(motor1A,1);
+    digitalWrite(motor1B,0);
+    digitalWrite(motor2A,0);
+    digitalWrite(motor2B,1);
+    delay(tiempo);
+    Serial.println(tiempo);
+    digitalWrite(motor1A,0);
+    digitalWrite(motor1B,0);
+    digitalWrite(motor2A,0);
+    digitalWrite(motor2B,0);  
+  }
+void atras(int tiempo){
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,0);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,0);
+  delay(500);
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,1);
+  digitalWrite(motor2A,1);
+  digitalWrite(motor2B,0);  
+  delay(tiempo);
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,0);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,0); 
+  }
+void girarderecha(){
+  Serial.println("girar derecha");
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,0);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,0);
+  delay(500);
+  digitalWrite(motor1A,1);
+  digitalWrite(motor1B,0);
+  digitalWrite(motor2A,1);
+  digitalWrite(motor2B,0);
+  delay(1000);
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,0);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,0); 
+  }
+ void girarizquierda(){
+  Serial.println("girar izquierda");
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,0);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,0);
+  delay(500);
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,1);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,1);
+  delay(1000);
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,0);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,0); 
+  }
+ void girarcientoochenta(){
+  Serial.println("girar 180");
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,0);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,0);
+  delay(500);
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,1);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,1);
+  delay(2000); // 3000 milisegundos para girar 180 grados
+  digitalWrite(motor1A,0);
+  digitalWrite(motor1B,0);
+  digitalWrite(motor2A,0);
+  digitalWrite(motor2B,0); 
+}
+
+
+void mover(int x,int y){
+  // movimiento en eje X
+  if(H==true){
+    Serial.println("H true");
+    if(x>0){
+      if(E==true){
+        adelante(x*timepomedio);
+        H=true;
+        V=false;
+        N=false;
+        S=false;
+        E=true;
+        O=false;
+        }else{
+          if(O==true){
+            girarcientoochenta();
+            adelante(x*timepomedio);
+                H=true;
+                V=false;
+                N=false;
+                S=false;
+                E=true;
+                O=false;
+            }
+          }
+      }else{
+        if(x<0){
+          if(E==true){
+            girarcientoochenta();
+            adelante(x*timepomedio);
+            H=true;
+            V=false;
+            N=false;
+            S=false;
+            E=false;
+            O=true;
+            }else{
+              if(O==true){             
+                adelante(x*timepomedio);
+                    H=true;
+                    V=false;
+                    N=false;
+                    S=false;
+                    E=false;
+                    O=true;
+                }
+             }
+          }
+        }
+    }else{
+      Serial.println("H false");
+      if(H==false){
+       if(x>0){
+        if(S==true){
+          girarizquierda();
+          adelante(x*timepomedio);
+          H=true;
+          V=false;
+          N=false;
+          S=false;
+          E=true;
+          O=false;
+          }else{
+            if(N==true){
+              girarderecha();
+              adelante(x*timepomedio);
+                  H=true;
+                  V=false;
+                  N=false;
+                  S=false;
+                  E=true;
+                  O=false;
+              }
+            }
+        }else{
+          if(x<0){
+            if(S==true){
+              girarderecha();
+              adelante(x*timepomedio);
+              H=true;
+              V=false;
+              N=false;
+              S=false;
+              E=false;
+              O=true;
+              }else{
+                if(N==true){             
+                 girarizquierda();
+                 adelante(x*timepomedio);
+                      H=true;
+                      V=false;
+                      N=false;
+                      S=false;
+                      E=false;
+                      O=true;
+                  }
+               }
+            }
+          }         
+        }
+      }
+  //movimiento en eje Y
+
+    if(V==true){
+      Serial.println("v true");
+    if(y>0){
+      if(S==true){
+        adelante(x*timepomedio);
+        H=false;
+        V=true;
+        N=false;
+        S=true;
+        E=false;
+        O=false;
+        }else{
+          if(N==true){
+            girarcientoochenta();
+            adelante(x*timepomedio);
+                H=false;
+                V=true;
+                N=false;
+                S=true;
+                E=false;
+                O=false;
+            }
+          }
+      }else{
+        if(y<0){
+          if(S==true){
+            girarcientoochenta();
+            adelante(x*timepomedio);
+            H=false;
+            V=true;
+            N=true;
+            S=false;
+            E=false;
+            O=true;
+            }else{
+              if(N==true){             
+                adelante(x*timepomedio);
+                    H=false;
+                    V=true;
+                    N=true;
+                    S=false;
+                    E=false;
+                    O=false;
+                }
+             }
+          }
+        }
+    }else{
+      if(V==false){
+        Serial.println("v false");
+       if(y>0){
+        if(E==true){
+          girarderecha();
+          adelante(x*timepomedio);
+          H=false;
+          V=true;
+          N=false;
+          S=true;
+          E=false;
+          O=false;
+          }else{
+            if(O==true){
+              girarizquierda();
+              adelante(x*timepomedio);
+                  H=false;
+                  V=true;
+                  N=false;
+                  S=true;
+                  E=false;
+                  O=false;
+              }
+            }
+        }else{
+          if(y<0){
+            if(E==true){
+              girarizquierda();
+              adelante(x*timepomedio);
+              H=false;
+              V=true;
+              N=true;
+              S=false;
+              E=false;
+              O=false;
+              }else{
+                if(O==true){             
+                 girarderecha();
+                 adelante(x*timepomedio);
+                      H=false;
+                      V=true;
+                      N=true;
+                      S=false;
+                      E=false;
+                      O=false;
+                  }
+               }
+            }
+          }         
+        }
+      }
+}
+void compara(int x,int y){
+  if(cont==1){
+    x2=x;
+    y2=y;
+    
+  }
+  if(cont==2){
+    x3=x2;
+    y3=y2;
+    x2=x;
+    y2=y;
+    cont=1;
+  }
+  resx=x2-x3;
+  resy=y2-y3;
+  Serial.print(resx);
+  Serial.print(" ");
+  Serial.println(resy);  
+  mover(resx,resy);
+
+}
+void loop() {
+  while (Serial.available()>0) {            
+    delay(10);                        
+    char c = Serial.read();               
+    voice += c;                     
+  }
+  delay(10000);
+ voice="ab";
+ for(int i=0;i<4;i++){
+  date=voice.charAt(i);
+   if(date=='a'||date=='b'||date=='c'||date=='d'||date=='e'||date=='f'||date=='g'||date=='h'||date=='i'){
+     
+  switch(date){
+    case 'a':
+      x=ax;
+      y=ay;
+      cont++;
+      compara(x,y);     
+      break;
+    case 'b':
+      x=bx;
+      y=ay;
+      cont++;
+     compara(x,y);     
+      break;
+    case 'c':
+      x=cx;
+      y=ay;
+      cont++;
+     compara(x,y);     
+      break;
+    case 'd':
+      x=ax;
+      y=by;
+      cont++;
+      compara(x,y);     
+      break;
+    case 'e':
+      x=bx;
+      y=by;
+      cont++;
+     compara(x,y);     
+      break;
+    case 'f':
+      x=cx;
+      y=by;
+      cont++;
+     compara(x,y);     
+      break;
+    case 'g':
+      x=ax;
+      y=cy;
+      cont++;
+    compara(x,y);     
+      break;
+    case 'h':
+      x=bx;
+      y=cy;
+      cont++;
+     compara(x,y);     
+      break;
+    case 'i':
+      x=cx;
+      y=cy;
+      cont++;
+     compara(x,y);   
+      break;
+   
+     }    
+   }
+ }
+ voice ="";
+}
