@@ -1,0 +1,160 @@
+#include <NewPing.h>
+#include <ezButton.h>
+
+//DEFINIENDO LAS CONSTANTES
+
+#define TRIGGER_PIN_1 5
+#define ECHO_PIN_1 6
+
+#define TRIGGER_PIN_2 7
+#define ECHO_PIN_2 8
+
+#define MAX_DISTANCE 200
+
+ezButton limitSwitch(7);
+
+//NEWPING CONV
+
+NewPing sensor_1(TRIGGER_PIN_1,ECHO_PIN_1,MAX_DISTANCE);
+NewPing sensor_2(TRIGGER_PIN_2,ECHO_PIN_2,MAX_DISTANCE);
+
+int entr1 = 2;
+int entr2 = 3;
+int entr3 = 4;
+int entr4 = 13;
+
+int entr5 = 9;
+int entr6 = 10;
+int entr7 = 11;
+int entr8 = 12;
+
+
+
+
+void setup() {
+  // put your setup code here, to run once:
+Serial.begin(9600);
+Serial.write(12);
+
+Serial.begin(9600);
+limitSwitch.setDebounceTime(50);
+
+ pinMode(entr1, OUTPUT);    //motor uno
+  pinMode(entr2, OUTPUT);
+  pinMode(entr3, OUTPUT);    //motor dos
+  pinMode(entr4, OUTPUT);
+
+   pinMode(entr5, OUTPUT);   //motor tres
+  pinMode(entr6, OUTPUT);
+  pinMode(entr7, OUTPUT);   //motor cuatro  
+  pinMode(entr8, OUTPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  digitalWrite(entr1, HIGH); //adelante
+  digitalWrite(entr2, LOW);
+  digitalWrite(entr3, HIGH); //adelante
+  digitalWrite(entr4, LOW);
+  delay(3000);
+  digitalWrite(entr1, LOW); //atras
+  digitalWrite(entr2, HIGH);
+  digitalWrite(entr3, HIGH); //adelante
+  digitalWrite(entr4, LOW);
+  delay(3000);
+  digitalWrite(entr1, HIGH); //adelante
+  digitalWrite(entr2, LOW);
+  digitalWrite(entr3, LOW);  //atras
+  digitalWrite(entr4, HIGH);
+  delay(3000);
+  digitalWrite(entr1, LOW); //se detiene
+  digitalWrite(entr2, LOW);
+  digitalWrite(entr3, LOW); //se detiene
+  digitalWrite(entr4, LOW);
+  delay(3000);
+
+  digitalWrite(entr5, HIGH); //adelante
+  digitalWrite(entr6, LOW);
+  digitalWrite(entr7, HIGH); //adelante
+  digitalWrite(entr8, LOW);
+  delay(3000);
+  digitalWrite(entr5, LOW); //atras
+  digitalWrite(entr6, HIGH);
+  digitalWrite(entr7, HIGH); //adelante
+  digitalWrite(entr8, LOW);
+  delay(3000);
+  digitalWrite(entr5, HIGH); //adelante
+  digitalWrite(entr6, LOW);
+  digitalWrite(entr7, LOW); //atras
+  digitalWrite(entr8, HIGH);
+  delay(3000);
+  digitalWrite(entr5, LOW); //se detiene
+  digitalWrite(entr6, LOW);
+  digitalWrite(entr7, LOW); //se detiene
+  digitalWrite(entr8, LOW);
+  delay(3000);
+  
+limitSwitch.loop();
+
+
+  //Conversión a integer de cm's 
+
+int val_sen_1 = sensor_1.ping_cm();
+
+int val_sen_2 = sensor_2.ping_cm();
+  
+ //PRINTLN PARA EVALUACION DE OUTPUT SENSORES ULTRASONICOS
+  
+delay(2000);
+Serial.print("distancia del sensor 1  ");
+Serial.print(sensor_1.ping_cm());
+Serial.println("cm");
+
+delay(2000);
+Serial.print("distancia del sensor 2  ");
+Serial.print(sensor_2.ping_cm());
+Serial.println("cm");
+
+ //FINAL DE PRINTLNS DDE EVALUACION
+  
+  //SI EL LIMITSWITCH ES PRESIONADO (IS PRESSED)
+  
+if(limitSwitch.isPressed())
+    Serial.println("The limit switch: UNTOUCHED -> TOUCHED");  //este pedo es cuando se presiona
+  
+  //SI EL LIMITSWITCH ES SOLTADO
+  
+if(limitSwitch.isReleased())
+    Serial.println("The limit switch: TOUCHED -> UNTOUCHED"); //cuando se queda despues de la presionada
+
+  //ESTADO DE LIMIT SWITCH EN NUMERO (PROBABLEMENTE BOOL, NECESITA EVALUACIÓN)
+  
+int state = limitSwitch.getState();
+
+  //EVALUACIÓN DEL ESTADO DEL LIMITSWITCH NUMÉRICO
+  //EVALUAR SI "HIGH" ES CONSIDERADO UN VALOR INTEGER TAMBIÉN
+  
+if(state == HIGH)
+    Serial.println("The limit switch: UNTOUCHED");
+    
+  
+  
+else
+    Serial.println("The limit switch: TOUCHED");
+    
+//EVALUACIÓN MATEMÁTICA DE LOS VALORES DE LOS SENSORES ULTRASÓNICOS 
+
+if (val_sen_1 > 7){
+ 
+}
+else{
+ 
+}
+if (val_sen_2 > 7){
+  
+}
+else{
+  
+}
+}
