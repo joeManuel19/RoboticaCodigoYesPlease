@@ -1,0 +1,172 @@
+//Sensor ultrasonico
+#include <NewPing.h>
+// se definen los pines para el sensor 1
+#define TRIGGER_sensor_1  29
+#define ECHO_sensor_1     28
+
+
+#define MAX_DISTANCE 200
+
+NewPing sensor_1(TRIGGER_sensor_1, ECHO_sensor_1, MAX_DISTANCE);
+
+
+
+//Pines puentes h
+#define enaI  2
+#define enaD  4
+#define in1I  22
+#define in2I  23
+#define in1D  24
+#define in2D  25
+#define enbI  3
+#define enbD  5
+
+//Pin limit switch
+#define lms 26
+
+//Variable de casos de ultrasonico
+int ctrl;
+
+//Variable distancia a pared derecha
+int d = 15;
+
+
+
+void setup() {
+  Serial.begin(9600);
+  // mandamos un comando para la hiperterminal limpiar pantalla
+  Serial.write(12);
+
+  pinMode(enaI, OUTPUT);
+  pinMode(enaD, OUTPUT);
+  pinMode(in1I, OUTPUT);
+  pinMode(in2I, OUTPUT);
+  pinMode(in1D, OUTPUT);
+  pinMode(in2D, OUTPUT);
+  pinMode(enbI, OUTPUT);
+  pinMode(enbD, OUTPUT);
+
+  analogWrite(enaI, 120);// Motor frontal izquierdo
+  analogWrite(enbI, 120);//Motor trasero izquierdo
+  analogWrite(enaD, 80); //Motor frontal derecho que va mas rapido
+  analogWrite(enbD, 90);//Motor trasero derecho
+
+}
+
+
+
+
+
+void loop() {
+  //digitalRead(lms)
+  //sensor_1.ping_cm()
+
+
+  //1. Bien en pared y no hay pared al frente
+  if (sensor_1.ping_cm() < d && digitalRead(lms) == 0) {
+
+    valUS();//Muestra valor de sensor ultrasonico
+    Serial.println("Bien en pared y no hay pared al frente");
+
+    //Avanza
+    movF();
+  }
+  //2. Bien en pared y hay pared al frente
+  else if (sensor_1.ping_cm() < d && digitalRead(lms) == 1) {
+
+    valUS();
+    Serial.println("Bien en pared y hay pared al frente");
+
+    //Reversa, gira izquierda  y avanza un paso y se detiene
+    movB();
+    delay(450);
+    movL();
+    delay(500);
+    movF();
+    delay(2000);
+    stp();
+  }
+  //3. Se aleja de la pared y no hay pared al frente
+  else if (sensor_1.ping_cm() > d && digitalRead(lms) == 0) {
+
+    valUS();
+    Serial.println("Se aleja de la pared y no hay pared al frente");
+
+    //avanza, Gira a la derecha y avanza
+    movF();
+    delay(100);
+    movR();
+    delay(800);
+    movF();
+    delay(3000);
+  }
+  //4. Se aleja de la pared y hay pared al frente
+  else if (sensor_1.ping_cm() > d && digitalRead(lms) == 1) {
+
+    valUS();
+    Serial.println("Se aleja de la pared y hay pared al frente");
+
+    //Gira a la derecha 90°
+    movR();
+    delay(1000);
+  }
+
+
+}
+
+
+
+
+//FUNCIONES DE NAVEGACION
+//Avanzar un paso al frente
+void movF() {
+  digitalWrite(in1I, 1); //Lado izquierdo hacia adelante
+  digitalWrite(in1D, 1); //Lado derecho hacia adelante
+}
+
+//Retroceder un paso
+void movB() {
+  digitalWrite(in1I, 0); //Lado izquierdo hacia atras
+  digitalWrite(in1D, 0); //Lado derecho hacia atras
+  digitalWrite(in2I, 1); //Lado izquierdo hacia atras
+  digitalWrite(in2D, 1); //Lado derecho hacia atras
+}
+
+//Detener todos los motores
+void stp() {
+  digitalWrite(in1I, 0); //Lado izquierdo hacia adelante
+  digitalWrite(in1D, 0); //Lado derecho hacia adelante
+  digitalWrite(in2I, 0); //Lado izquierdo hacia atras
+  digitalWrite(in2D, 0); //Lado derecho hacia atras
+}
+
+//Girar a la derecha
+void movR() {
+  digitalWrite(in1D, 0); //Lado derecho hacia adelante
+  digitalWrite(in2I, 0); //Lado izquierdo hacia atras
+  digitalWrite(in1I, 1); //Lado izquierdo hacia adelante
+  digitalWrite(in2D, 1); //Lado derecho hacia atras
+}
+
+//Girar a la izquierda
+void movL() {
+
+  digitalWrite(in1I, 0); //Lado izquierdo hacia adelante
+  digitalWrite(in2D, 0); //Lado derecho hacia atras
+  digitalWrite(in2I, 1); //Lado izquierdo hacia atras
+  digitalWrite(in1D, 1); //Lado derecho hacia adelante
+}
+
+
+
+
+
+//FUNCION MOSTRAR DISTANCIA
+void valUS() {
+  //Mostrar distancia de ultrasonico 1
+  Serial.print("distancia del sensor 1: ");
+  Serial.print(sensor_1.ping_cm());
+  Serial.println("cm");
+
+
+}
